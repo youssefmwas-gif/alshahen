@@ -105,18 +105,6 @@
             z-index: 1;
         }
 
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(212, 175, 55, 0.12);
-            color: var(--gold-soft);
-            font-size: 0.92rem;
-            margin-bottom: 16px;
-        }
-
         .hero h1 {
             font-size: clamp(2rem, 5vw, 4rem);
             line-height: 1.15;
@@ -407,16 +395,6 @@
             flex: 1;
         }
 
-        .product-badge {
-            background: rgba(212, 175, 55, 0.14);
-            color: var(--gold-soft);
-            border: 1px solid rgba(212, 175, 55, 0.24);
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 0.82rem;
-            white-space: nowrap;
-        }
-
         .product-card h3 {
             font-size: 1.28rem;
             margin-bottom: 6px;
@@ -426,6 +404,10 @@
             color: var(--muted);
             font-size: 0.96rem;
             min-height: 58px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .gallery-dots {
@@ -444,6 +426,7 @@
             background: rgba(255, 255, 255, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.3);
             transition: transform 0.25s ease, background 0.25s ease;
+            cursor: pointer;
         }
 
         .gallery-dot.active {
@@ -839,7 +822,6 @@
         <header class="hero">
             <div class="hero-grid">
                 <div>
-                    <span class="eyebrow">متجر رقمي متكامل للخدمات والاشتراكات</span>
                     <div class="hero-mark" aria-hidden="true">
                         <svg viewBox="0 0 128 128" role="img">
                             <path d="M64 18c7 9 17 16 28 18-3 3-7 6-12 8 10 3 19 10 24 20-7-4-14-6-22-6 6 8 10 18 10 29 0 21-13 34-28 42-15-8-28-21-28-42 0-11 4-21 10-29-8 0-15 2-22 6 5-10 14-17 24-20-5-2-9-5-12-8 11-2 21-9 28-18Zm0 27c-6 6-13 10-22 12 6 5 11 11 14 18 2-4 5-8 8-11 3 3 6 7 8 11 3-7 8-13 14-18-9-2-16-6-22-12Zm-8 43c-3 0-5 3-5 6 0 9 5 18 13 24 8-6 13-15 13-24 0-3-2-6-5-6-3 0-5 2-8 5-3-3-5-5-8-5Z"/>
@@ -901,8 +883,8 @@
 
                 <section class="toolbar">
                     <div class="section-head">
-                        <h2>كتالوج المنتجات</h2>
-                        <span id="results-meta" class="cart-count">جارِ التحميل...</span>
+                        <h2>المنتجات</h2>
+                        <span id="results-meta" class="cart-count hide">جارِ التحميل...</span>
                     </div>
 
                     <div class="toolbar-grid">
@@ -1088,9 +1070,7 @@
             const category = row[3] || "عام";
             const badge = row[4] || "جاهز";
             const features = row[5] ? row[5].split("|").map(item => item.trim()).filter(Boolean) : [];
-            const images = row[6]
-                ? row[6].split("|").map(item => item.trim()).filter(Boolean)
-                : [];
+            const images = row[6] ? row[6].split("|").map(item => item.trim()).filter(Boolean) : [];
 
             return {
                 id: `product-${index + 1}`,
@@ -1111,23 +1091,30 @@
                 return escapeHtml(product.images[activeIndex]);
             }
 
-            const fallback = `
-                data:image/svg+xml;utf8,
+            const svg = `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
                     <defs>
                         <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-                            <stop offset="0%" stop-color="%23181818"/>
-                            <stop offset="100%" stop-color="%230d0d0d"/>
+                            <stop offset="0%" stop-color="#181818"/>
+                            <stop offset="100%" stop-color="#0d0d0d"/>
                         </linearGradient>
                     </defs>
-                    <rect width="800" height="500" fill="url(%23g)"/>
+                    <rect width="800" height="500" fill="url(#g)"/>
                     <circle cx="640" cy="110" r="120" fill="rgba(212,175,55,0.18)"/>
-                    <text x="400" y="215" text-anchor="middle" fill="%23d4af37" font-size="46" font-family="Tajawal, sans-serif">متجر الشاهين</text>
-                    <text x="400" y="285" text-anchor="middle" fill="%23f8f5ec" font-size="30" font-family="Tajawal, sans-serif">صورة المنتج غير مضافة بعد</text>
+                    <text x="400" y="215" text-anchor="middle" fill="#d4af37" font-size="46" font-family="Tajawal, sans-serif">متجر الشاهين</text>
+                    <text x="400" y="285" text-anchor="middle" fill="#f8f5ec" font-size="30" font-family="Tajawal, sans-serif">صورة المنتج</text>
                 </svg>
-            `;
+            `.replace(/\s+/g, " ").trim();
 
-            return fallback.replace(/\s+/g, " ").trim();
+            return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+        }
+
+        function handleImageError(imageElement) {
+            const productId = imageElement.dataset.productId;
+            const product = findProduct(productId);
+            if (!product) return;
+            imageElement.onerror = null;
+            imageElement.src = getProductImage({ ...product, images: [] });
         }
 
         async function loadProducts() {
@@ -1224,7 +1211,7 @@
             container.innerHTML = filteredProducts.map(product => `
                 <article class="product-card">
                     <div class="product-media">
-                        <img class="product-image" src="${getProductImage(product)}" alt="${escapeHtml(product.name)}" loading="lazy" onclick="openLightbox('${product.id}', ${product.activeImageIndex || 0})">
+                        <img class="product-image" src="${getProductImage(product)}" alt="${escapeHtml(product.name)}" loading="lazy" data-product-id="${product.id}" onerror="handleImageError(this)" onclick="openLightbox('${product.id}', ${product.activeImageIndex || 0})">
                         <span class="product-badge-floating">${escapeHtml(product.badge)}</span>
                         ${product.images.length > 1 ? `
                             <div class="gallery-dots">
@@ -1597,6 +1584,7 @@
         restoreState();
         loadProducts();
     </script>
+
     <div id="lightbox" class="lightbox" onclick="if (event.target.id === 'lightbox') closeLightbox()">
         <div class="lightbox-card">
             <div class="lightbox-head">
