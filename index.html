@@ -340,18 +340,56 @@
             background: linear-gradient(180deg, rgba(22, 22, 22, 0.96), rgba(11, 11, 11, 0.96));
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 24px;
-            padding: 18px;
-            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+            padding: 0;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 18px 30px rgba(0, 0, 0, 0.24);
             display: flex;
             flex-direction: column;
-            gap: 14px;
             min-height: 100%;
+            overflow: hidden;
+            animation: cardReveal 0.55s ease both;
         }
 
-        .product-card:hover {
-            border-color: rgba(212, 175, 55, 0.46);
-            box-shadow: 0 22px 40px rgba(0, 0, 0, 0.36);
+        .product-media {
+            position: relative;
+            padding: 14px 14px 0;
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 16 / 11;
+            object-fit: cover;
+            display: block;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background:
+                radial-gradient(circle at top, rgba(212, 175, 55, 0.16), transparent 40%),
+                linear-gradient(135deg, #1b1b1b, #101010);
+            transition: transform 0.45s ease, filter 0.35s ease;
+            cursor: zoom-in;
+        }
+
+        .product-media::after {
+            content: "";
+            position: absolute;
+            inset: 14px 14px 0;
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.44));
+            pointer-events: none;
+        }
+
+        .product-badge-floating {
+            position: absolute;
+            top: 26px;
+            right: 26px;
+            z-index: 1;
+            background: rgba(12, 12, 12, 0.72);
+            color: var(--gold-soft);
+            border: 1px solid rgba(212, 175, 55, 0.26);
+            backdrop-filter: blur(8px);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.82rem;
         }
 
         .product-top {
@@ -359,6 +397,14 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
+        }
+
+        .product-body {
+            padding: 16px 18px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            flex: 1;
         }
 
         .product-badge {
@@ -372,14 +418,38 @@
         }
 
         .product-card h3 {
-            font-size: 1.22rem;
-            margin-bottom: 4px;
+            font-size: 1.28rem;
+            margin-bottom: 6px;
         }
 
         .product-meta {
             color: var(--muted);
-            font-size: 0.93rem;
-            min-height: 54px;
+            font-size: 0.96rem;
+            min-height: 58px;
+        }
+
+        .gallery-dots {
+            position: absolute;
+            left: 28px;
+            bottom: 14px;
+            z-index: 1;
+            display: flex;
+            gap: 7px;
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .gallery-dot.active {
+            background: var(--gold-soft);
+            transform: scale(1.25);
+            border-color: rgba(212, 175, 55, 0.4);
         }
 
         .product-features {
@@ -611,6 +681,108 @@
 
         .hide {
             display: none !important;
+        }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 120;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.28s ease;
+        }
+
+        .lightbox.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-card {
+            width: min(980px, 100%);
+            background: rgba(12, 12, 12, 0.96);
+            border: 1px solid rgba(212, 175, 55, 0.18);
+            border-radius: 26px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            transform: translateY(18px) scale(0.98);
+            transition: transform 0.28s ease;
+        }
+
+        .lightbox.show .lightbox-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .lightbox-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .lightbox-title {
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .lightbox-close {
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .lightbox-image {
+            width: 100%;
+            max-height: 68vh;
+            object-fit: contain;
+            border-radius: 20px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .lightbox-thumbs {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            overflow: auto;
+        }
+
+        .lightbox-thumb {
+            width: 92px;
+            height: 68px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            opacity: 0.72;
+            transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .lightbox-thumb.active {
+            opacity: 1;
+            border-color: rgba(212, 175, 55, 0.48);
+            transform: translateY(-2px);
+        }
+
+        @keyframes cardReveal {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 1120px) {
@@ -916,6 +1088,9 @@
             const category = row[3] || "عام";
             const badge = row[4] || "جاهز";
             const features = row[5] ? row[5].split("|").map(item => item.trim()).filter(Boolean) : [];
+            const images = row[6]
+                ? row[6].split("|").map(item => item.trim()).filter(Boolean)
+                : [];
 
             return {
                 id: `product-${index + 1}`,
@@ -924,8 +1099,35 @@
                 price,
                 category,
                 badge,
-                features
+                features,
+                images,
+                activeImageIndex: 0
             };
+        }
+
+        function getProductImage(product) {
+            if (product.images && product.images.length) {
+                const activeIndex = Math.min(product.activeImageIndex || 0, product.images.length - 1);
+                return escapeHtml(product.images[activeIndex]);
+            }
+
+            const fallback = `
+                data:image/svg+xml;utf8,
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+                    <defs>
+                        <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0%" stop-color="%23181818"/>
+                            <stop offset="100%" stop-color="%230d0d0d"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="800" height="500" fill="url(%23g)"/>
+                    <circle cx="640" cy="110" r="120" fill="rgba(212,175,55,0.18)"/>
+                    <text x="400" y="215" text-anchor="middle" fill="%23d4af37" font-size="46" font-family="Tajawal, sans-serif">متجر الشاهين</text>
+                    <text x="400" y="285" text-anchor="middle" fill="%23f8f5ec" font-size="30" font-family="Tajawal, sans-serif">صورة المنتج غير مضافة بعد</text>
+                </svg>
+            `;
+
+            return fallback.replace(/\s+/g, " ").trim();
         }
 
         async function loadProducts() {
@@ -1021,27 +1223,45 @@
 
             container.innerHTML = filteredProducts.map(product => `
                 <article class="product-card">
-                    <div class="product-top">
-                        <div>
-                            <h3>${escapeHtml(product.name)}</h3>
-                            <div class="product-meta">${escapeHtml(product.desc)}</div>
-                        </div>
-                        <span class="product-badge">${escapeHtml(product.badge)}</span>
+                    <div class="product-media">
+                        <img class="product-image" src="${getProductImage(product)}" alt="${escapeHtml(product.name)}" loading="lazy" onclick="openLightbox('${product.id}', ${product.activeImageIndex || 0})">
+                        <span class="product-badge-floating">${escapeHtml(product.badge)}</span>
+                        ${product.images.length > 1 ? `
+                            <div class="gallery-dots">
+                                ${product.images.map((_, index) => `
+                                    <button
+                                        type="button"
+                                        class="gallery-dot ${index === (product.activeImageIndex || 0) ? "active" : ""}"
+                                        onclick="setProductImage('${product.id}', ${index})"
+                                        aria-label="عرض الصورة ${index + 1}"
+                                    ></button>
+                                `).join("")}
+                            </div>
+                        ` : ""}
                     </div>
 
-                    <div class="product-features">
-                        <span class="feature-chip">${escapeHtml(product.category)}</span>
-                        ${product.features.map(feature => `<span class="feature-chip">${escapeHtml(feature)}</span>`).join("")}
-                    </div>
-
-                    <div class="price-row">
-                        <div class="price-block">
-                            <strong>${formatCurrency(product.price)}</strong>
-                            <span>سعر نهائي للخدمة</span>
+                    <div class="product-body">
+                        <div class="product-top">
+                            <div>
+                                <h3>${escapeHtml(product.name)}</h3>
+                                <div class="product-meta">${escapeHtml(product.desc)}</div>
+                            </div>
                         </div>
-                        <div class="product-actions">
-                            <button class="icon-btn" type="button" title="عرض سريع" onclick="quickAdd('${product.id}')">+</button>
-                            <button class="btn" type="button" onclick="addToCart('${product.id}')">إضافة للسلة</button>
+
+                        <div class="product-features">
+                            <span class="feature-chip">${escapeHtml(product.category)}</span>
+                            ${product.features.map(feature => `<span class="feature-chip">${escapeHtml(feature)}</span>`).join("")}
+                        </div>
+
+                        <div class="price-row">
+                            <div class="price-block">
+                                <strong>${formatCurrency(product.price)}</strong>
+                                <span>سعر نهائي للخدمة</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="icon-btn" type="button" title="إضافة سريعة" onclick="quickAdd('${product.id}')">+</button>
+                                <button class="btn" type="button" onclick="addToCart('${product.id}')">إضافة للسلة</button>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -1052,6 +1272,13 @@
 
         function findProduct(productId) {
             return products.find(product => product.id === productId);
+        }
+
+        function setProductImage(productId, index) {
+            const product = findProduct(productId);
+            if (!product || !product.images.length) return;
+            product.activeImageIndex = index;
+            applyFilters();
         }
 
         function quickAdd(productId) {
@@ -1306,6 +1533,51 @@
             document.getElementById("checkout").scrollIntoView({ behavior: "smooth", block: "start" });
         }
 
+        function openLightbox(productId, index = 0) {
+            const product = findProduct(productId);
+            if (!product) return;
+
+            const images = product.images.length ? product.images : [getProductImage(product)];
+            const safeIndex = Math.min(index, images.length - 1);
+            const root = document.getElementById("lightbox");
+
+            root.dataset.productId = productId;
+            root.dataset.index = safeIndex;
+            document.getElementById("lightbox-title").textContent = product.name;
+            document.getElementById("lightbox-image").src = images[safeIndex];
+            document.getElementById("lightbox-image").alt = product.name;
+            document.getElementById("lightbox-thumbs").innerHTML = images.map((image, imageIndex) => `
+                <img
+                    src="${escapeHtml(image)}"
+                    alt="${escapeHtml(product.name)}"
+                    class="lightbox-thumb ${imageIndex === safeIndex ? "active" : ""}"
+                    onclick="openLightbox('${productId}', ${imageIndex})"
+                >
+            `).join("");
+            root.classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeLightbox() {
+            const root = document.getElementById("lightbox");
+            root.classList.remove("show");
+            document.body.style.overflow = "";
+        }
+
+        function lightboxStep(delta) {
+            const root = document.getElementById("lightbox");
+            const productId = root.dataset.productId;
+            if (!productId) return;
+
+            const product = findProduct(productId);
+            if (!product) return;
+
+            const images = product.images.length ? product.images : [getProductImage(product)];
+            const currentIndex = Number(root.dataset.index || 0);
+            const nextIndex = (currentIndex + delta + images.length) % images.length;
+            openLightbox(productId, nextIndex);
+        }
+
         document.getElementById("search-input").addEventListener("input", applyFilters);
         document.getElementById("category-filter").addEventListener("change", applyFilters);
         document.getElementById("sort-filter").addEventListener("change", applyFilters);
@@ -1313,9 +1585,31 @@
         document.getElementById("customer-phone").addEventListener("input", persistCustomer);
         document.getElementById("pay-method").addEventListener("change", persistCustomer);
         document.getElementById("customer-notes").addEventListener("input", persistCustomer);
+        document.addEventListener("keydown", event => {
+            const lightbox = document.getElementById("lightbox");
+            if (!lightbox.classList.contains("show")) return;
+
+            if (event.key === "Escape") closeLightbox();
+            if (event.key === "ArrowLeft") lightboxStep(1);
+            if (event.key === "ArrowRight") lightboxStep(-1);
+        });
 
         restoreState();
         loadProducts();
     </script>
+    <div id="lightbox" class="lightbox" onclick="if (event.target.id === 'lightbox') closeLightbox()">
+        <div class="lightbox-card">
+            <div class="lightbox-head">
+                <div class="lightbox-title" id="lightbox-title">صورة المنتج</div>
+                <div style="display:flex; gap:10px;">
+                    <button class="lightbox-close" type="button" onclick="lightboxStep(-1)" aria-label="السابق">‹</button>
+                    <button class="lightbox-close" type="button" onclick="lightboxStep(1)" aria-label="التالي">›</button>
+                    <button class="lightbox-close" type="button" onclick="closeLightbox()" aria-label="إغلاق">×</button>
+                </div>
+            </div>
+            <img id="lightbox-image" class="lightbox-image" src="" alt="">
+            <div id="lightbox-thumbs" class="lightbox-thumbs"></div>
+        </div>
+    </div>
 </body>
 </html>
