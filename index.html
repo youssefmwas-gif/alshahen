@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر الشاهين</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { margin: 0; padding: 0; background-color: #0a0a0a; color: #fff; }
+        
+        /* شريط التنقل */
+        .navbar {
+            background-color: #111;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #d4af37;
+        }
+        .navbar button {
+            background: none;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 8px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .navbar button:hover, .navbar button.active {
+            background-color: #d4af37;
+            color: #000;
+        }
+
+        /* الأقسام */
+        .section { display: none; padding: 40px 20px; text-align: center; }
+        .section.active { display: block; animation: fadeIn 0.5s; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        h1, h2 { color: #d4af37; text-shadow: 1px 1px 5px rgba(212, 175, 55, 0.3); }
+
+        /* شبكة المنتجات */
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            width: 250px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+        .card:hover { border-color: #d4af37; transform: scale(1.03); }
+        .card h3 { color: #d4af37; }
+        
+        .btn-buy {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #d4af37;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 100%;
+        }
+        .btn-buy:hover { background-color: #b5952f; }
+
+        .contact-info { margin-top: 20px; font-size: 1.1em; color: #ccc; }
+        .contact-info span { color: #d4af37; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <button onclick="showSection('home')" class="active" id="btn-home">الرئيسية</button>
+        <button onclick="showSection('services')" id="btn-services">الخدمات</button>
+        <button onclick="showSection('payment')" id="btn-payment">الدفع والتواصل</button>
+    </div>
+
+    <div id="home" class="section active">
+        <h1>متجر الشاهين</h1>
+        <p>بوابتك المتكاملة للخدمات الرقمية، تفعيل البرامج، ودعم السوشل ميديا.</p>
+        <img src="https://via.placeholder.com/600x300/111/d4af37?text=Al+Shaheen+Store" alt="الشاهين" style="max-width: 100%; border-radius: 10px; border: 1px solid #d4af37; margin-top: 20px;">
+    </div>
+
+    <div id="services" class="section">
+        <h2>خدماتنا المميزة</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>برامج الذكاء الاصطناعي</h3>
+                <p>تفعيل اشتراكات ChatGPT و Midjourney وغيرها.</p>
+                <a href="https://t.me/wolfoldd?text=أريد الاستفسار عن برامج الذكاء الاصطناعي" target="_blank" class="btn-buy">طلب عبر تليغرام</a>
+            </div>
+            <div class="card">
+                <h3>تفعيل أرقام التواصل</h3>
+                <p>أرقام وهمية وحقيقية لتفعيل كافة التطبيقات.</p>
+                <a href="https://t.me/wolfoldd?text=أريد طلب رقم تفعيل" target="_blank" class="btn-buy">طلب عبر تليغرام</a>
+            </div>
+            <div class="card">
+                <h3>شحن الألعاب</h3>
+                <p>شحن فوري لأشهر الألعاب بأسعار منافسة.</p>
+                <a href="https://t.me/wolfoldd?text=أريد شحن لعبة" target="_blank" class="btn-buy">طلب عبر تليغرام</a>
+            </div>
+            <div class="card">
+                <h3>تفعيل البرامج المدفوعة</h3>
+                <p>برامج هندسية، تصميم، وويندوز.</p>
+                <a href="https://t.me/wolfoldd?text=أريد تفعيل برنامج" target="_blank" class="btn-buy">طلب عبر تليغرام</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="payment" class="section">
+        <h2>طرق الدفع المعتمدة</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>تطبيق شام كاش</h3>
+                <p>تحويل سريع وآمن عبر تطبيق شام كاش.</p>
+            </div>
+            <div class="card">
+                <h3>المحفظة الإلكترونية</h3>
+                <p>نقبل الدفع عبر كافة المحافظ الإلكترونية المعتمدة.</p>
+            </div>
+        </div>
+        <div class="contact-info">
+            <p>للتواصل المباشر وإتمام الطلبات:</p>
+            <p>تليغرام: <span>@wolfoldd</span></p>
+            <p>هاتف / واتساب: <span dir="ltr">+963 934 000 097</span></p>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // إخفاء كل الأقسام
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            // إزالة التفعيل من كل الأزرار
+            document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active'));
+            
+            // إظهار القسم المطلوب وتفعيل زره
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('btn-' + sectionId).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
