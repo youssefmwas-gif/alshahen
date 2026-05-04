@@ -1,241 +1,271 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#d4af37">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متجر الشاهين | خدمات رقمية</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;800&display=swap" rel="stylesheet">
+<title>متجر الشاهين</title>
+<meta name="description" content="متجر الشاهين – خدمات رقمية، اشتراكات، VPN، ذكاء اصطناعي">
 
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#d4af37">
-<meta name="description" content="متجر الشاهين – خدمات رقمية، اشتراكات، برامج، VPN، ذكاء اصطناعي">
 
 <style>
-:root {
-  --bg:#0b0b0b;
-  --panel:#131313;
-  --gold:#d4af37;
-  --text:#f5f5f5;
-  --muted:#999;
-  --radius:18px;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0b0b0b;
+  color:#fff;
 }
-*{box-sizing:border-box;font-family:Tajawal,sans-serif}
-body{margin:0;background:var(--bg);color:var(--text)}
-h1,h2,h3{margin:0}
-.page{max-width:1200px;margin:auto;padding:20px}
-.grid{display:grid;gap:16px}
-.products{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+header{
+  text-align:center;
+  padding:20px;
+}
+h1{color:#d4af37}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:1fr 340px;
+  gap:20px;
+}
 .card{
-  background:var(--panel);
-  border-radius:var(--radius);
-  padding:16px;
-  box-shadow:0 12px 30px rgba(0,0,0,.4)
+  background:#141414;
+  border-radius:15px;
+  padding:15px;
 }
-.btn{
-  border:none;cursor:pointer;
-  padding:12px 16px;
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:15px;
+}
+.product{
+  border:1px solid #222;
   border-radius:12px;
-  font-weight:700
+  padding:12px;
 }
-.btn-gold{background:var(--gold);color:#000}
-.btn-alt{background:#1e1e1e;color:var(--text)}
-.btn-small{padding:8px 12px;font-size:.9rem}
-.header{text-align:center;margin-bottom:24px}
-.header h1{font-size:2.5rem;color:var(--gold)}
-.cart{
-  position:sticky;top:16px
+button{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
 }
-.cart-item{border-bottom:1px solid #222;padding:8px 0}
-.cart-item:last-child{border-bottom:none}
+.gold{background:#d4af37;color:#000;font-weight:bold}
+.gray{background:#222;color:#fff}
+.cart-item{
+  border-bottom:1px solid #333;
+  padding:8px 0;
+}
+.small{font-size:0.85rem;color:#aaa}
+.lang-switch{
+  position:fixed;
+  top:10px;
+  left:10px;
+}
 .toast{
-  position:fixed;left:20px;bottom:20px;
-  background:#111;padding:14px 18px;
-  border-radius:14px;
-  border:1px solid rgba(212,175,55,.3);
-  opacity:0;transform:translateY(20px);
-  transition:.3s;z-index:100
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  background:#111;
+  padding:12px 16px;
+  border-radius:10px;
+  border:1px solid #333;
+  opacity:0;
+  transition:0.3s;
 }
-.toast.show{opacity:1;transform:none}
+.toast.show{opacity:1}
 </style>
 </head>
 
 <body>
-<div class="page">
 
-<header class="header">
-  <h1>🦅 متجر الشاهين</h1>
-  <p style="color:var(--muted)">خدمات رقمية – اشتراكات – تفعيل – VPN</p>
+<div class="lang-switch">
+  <button onclick="setLang('ar')">AR</button>
+  <button onclick="setLang('en')">EN</button>
+</div>
+
+<header>
+  <h1 id="storeTitle">متجر الشاهين</h1>
+  <p id="storeDesc">خدمات رقمية – اشتراكات – VPN</p>
 </header>
 
-<div class="grid" style="grid-template-columns:1fr 360px">
+<div class="container">
+  <main>
+    <div class="products" id="products"></div>
+  </main>
 
-<!-- المنتجات -->
-<main>
-  <div class="grid products" id="products"></div>
-</main>
-
-<!-- السلة -->
-<aside class="card cart">
-  <h2>🛒 السلة</h2>
-  <div id="cartItems"></div>
-
-  <p><strong>الإجمالي:</strong> <span id="total">0$</span></p>
-
-  <button class="btn btn-gold" onclick="sendOrder()">إتمام الطلب</button>
-  <button class="btn btn-alt btn-small" onclick="copyCash()">📋 نسخ رقم شام كاش</button>
-
-  <p style="font-size:.85rem;color:var(--muted)">
-    الدفع عبر شام كاش أو محفظة إلكترونية
-  </p>
-</aside>
-
-</div>
+  <aside class="card">
+    <h2 id="cartTitle">السلة</h2>
+    <div id="cartItems"></div>
+    <p><strong id="totalLabel">الإجمالي:</strong> <span id="total">0$</span></p>
+    <button class="gold" onclick="sendOrder()" id="checkoutBtn">إتمام الطلب</button>
+    <button class="gray" onclick="copyCash()">نسخ رقم شام كاش</button>
+    <p class="small">الدفع عبر شام كاش أو محفظة إلكترونية</p>
+  </aside>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* =================== CONFIG =================== */
+/* ================= CONFIG ================= */
 const CONFIG = {
-  whatsapp: "963934000097",
-  telegram: "wolfoldd",
-  shamCash: "123456789", // ← غيّر الرقم
-  currency: "$",
-  rateLimitMs: 90000
+  SHEET_URL: "PUT_YOUR_GOOGLE_SHEET_CSV_URL_HERE",
+  ADMIN_PASSWORD: "SHAHIN_ADMIN_123",
+  WHATSAPP: "963934000097",
+  SHAM_CASH: "123456789"
 };
 
-/* =================== DATA =================== */
-const PRODUCTS = [
-  {id:1,name:"اشتراك ChatGPT Plus",price:10},
-  {id:2,name:"VPN شهر",price:5},
-  {id:3,name:"VPN سنة",price:30},
-  {id:4,name:"تفعيل رقم واتساب",price:3}
-];
+/* ================= LANG ================= */
+const TEXT = {
+  ar:{
+    title:"متجر الشاهين",
+    desc:"خدمات رقمية – اشتراكات – VPN",
+    cart:"السلة",
+    total:"الإجمالي:",
+    add:"إضافة للسلة",
+    priceHidden:"تواصل لمعرفة السعر",
+    checkout:"إتمام الطلب"
+  },
+  en:{
+    title:"Shahin Store",
+    desc:"Digital Services – Subscriptions – VPN",
+    cart:"Cart",
+    total:"Total:",
+    add:"Add to cart",
+    priceHidden:"Contact for price",
+    checkout:"Checkout"
+  }
+};
+let lang = localStorage.getItem("lang") || "ar";
 
+/* ================= STATE ================= */
+let products = [];
 let cart = [];
-let lastOrderTs = 0;
+let isAdmin = localStorage.getItem("admin")==="1";
+let lastOrder = 0;
 
-/* =================== UI =================== */
-const productsEl = document.getElementById("products");
-const cartEl = document.getElementById("cartItems");
-const totalEl = document.getElementById("total");
-const toast = document.getElementById("toast");
+/* ================= UI ================= */
+function t(k){ return TEXT[lang][k]; }
 
-function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"),2500);
+function toast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg;
+  el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),2500);
 }
 
-/* =================== RENDER =================== */
+function setLang(l){
+  localStorage.setItem("lang",l);
+  location.reload();
+}
+
+/* ================= LOAD PRODUCTS ================= */
+async function loadProducts(){
+  const res = await fetch(CONFIG.SHEET_URL,{cache:"no-store"});
+  const text = await res.text();
+  const rows = text.split("\n").slice(1);
+
+  products = rows.map((r,i)=>{
+    const c = r.split(",");
+    return {
+      id:i+1,
+      name:c[0],
+      price:Number(c[1]),
+      active:c[3]==="TRUE",
+      adminOnly:c[4]==="TRUE"
+    };
+  }).filter(p=>p.active && (isAdmin || !p.adminOnly));
+
+  renderProducts();
+}
+
+/* ================= RENDER ================= */
 function renderProducts(){
-  productsEl.innerHTML = PRODUCTS.map(p=>`
-    <div class="card">
-      <h3>${p.name}</h3>
-      <p style="color:var(--gold);font-size:1.3rem">${p.price}${CONFIG.currency}</p>
-      <button class="btn btn-alt" onclick="addToCart(${p.id})">إضافة للسلة</button>
-    </div>
-  `).join("");
+  const wrap=document.getElementById("products");
+  wrap.innerHTML="";
+  products.forEach(p=>{
+    const price = isAdmin ? `${p.price}$` : t("priceHidden");
+    wrap.innerHTML+=`
+      <div class="product">
+        <h3>${p.name}</h3>
+        <p>${price}</p>
+        <button class="gray" onclick="addToCart(${p.id})">${t("add")}</button>
+      </div>`;
+  });
 }
 
 function renderCart(){
+  const wrap=document.getElementById("cartItems");
   if(!cart.length){
-    cartEl.innerHTML = "<p style='color:var(--muted)'>السلة فارغة</p>";
-    totalEl.textContent = "0$";
+    wrap.innerHTML="<p class='small'>فارغة</p>";
     return;
   }
-
-  cartEl.innerHTML = cart.map(i=>`
-    <div class="cart-item">
-      ${i.name} × ${i.qty}
-      <div style="float:left">${i.price*i.qty}${CONFIG.currency}</div>
-    </div>
-  `).join("");
-
-  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  totalEl.textContent = total+CONFIG.currency;
+  wrap.innerHTML="";
+  cart.forEach(i=>{
+    wrap.innerHTML+=`
+      <div class="cart-item">
+        ${i.name} × ${i.qty}
+        <span style="float:left">${i.price*i.qty}$</span>
+      </div>`;
+  });
+  document.getElementById("total").textContent=
+    cart.reduce((s,i)=>s+i.price*i.qty,0)+"$";
 }
 
-/* =================== LOGIC =================== */
+/* ================= LOGIC ================= */
 function addToCart(id){
-  const p = PRODUCTS.find(x=>x.id===id);
+  const p=products.find(x=>x.id===id);
   if(!p) return;
-
-  const existing = cart.find(i=>i.id===id);
-  if(existing) existing.qty++;
-  else cart.push({...p,qty:1});
-
+  const e=cart.find(x=>x.id===id);
+  e?e.qty++:cart.push({id:p.id,name:p.name,price:p.price,qty:1});
   renderCart();
-  showToast("تمت إضافة المنتج");
-}
-
-function generateFingerprint(){
-  return Math.random().toString(36).slice(2,10).toUpperCase();
+  toast("تمت الإضافة");
 }
 
 function sendOrder(){
-  if(!cart.length){
-    showToast("السلة فارغة");
-    return;
-  }
+  if(Date.now()-lastOrder<60000){toast("انتظر دقيقة");return;}
+  if(!cart.length){toast("السلة فارغة");return;}
+  lastOrder=Date.now();
 
-  const now = Date.now();
-  if(now - lastOrderTs < CONFIG.rateLimitMs){
-    showToast("يرجى الانتظار قبل إرسال طلب جديد");
-    return;
-  }
-  lastOrderTs = now;
-
-  const orderId = generateFingerprint();
-  let text = `طلب جديد #${orderId}\n\n`;
-
-  cart.forEach((i,idx)=>{
-    text += `${idx+1}. ${i.name} × ${i.qty} = ${i.price*i.qty}${CONFIG.currency}\n`;
-  });
-
-  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  text += `\nالإجمالي: ${total}${CONFIG.currency}`;
-  text += `\nطريقة الدفع: شام كاش / محفظة إلكترونية`;
-
-  const waUrl = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
-  window.open(waUrl,"_blank");
-
-  showToast("تم فتح واتساب");
+  let text="طلب جديد:\n";
+  cart.forEach((i,n)=>text+=`${n+1}) ${i.name} x${i.qty}\n`);
+  text+="الإجمالي: "+cart.reduce((s,i)=>s+i.price*i.qty,0)+"$\n";
+  window.open("https://wa.me/"+CONFIG.WHATSAPP+"?text="+encodeURIComponent(text));
 }
 
 function copyCash(){
-  navigator.clipboard.writeText(CONFIG.shamCash);
-  showToast("تم نسخ رقم شام كاش");
+  navigator.clipboard.writeText(CONFIG.SHAM_CASH);
+  toast("تم نسخ رقم شام كاش");
 }
 
-/* =================== INIT =================== */
-renderProducts();
-renderCart();
-</script>
-  <script>
-/* ===== كودك الموجود ===== */
-// restoreState();
-// loadProducts();
-// event listeners...
+/* ================= ADMIN ================= */
+let clicks=0;
+document.querySelector("h1").onclick=()=>{
+  clicks++;
+  if(clicks===5){
+    const p=prompt("كلمة مرور الأدمن:");
+    if(p===CONFIG.ADMIN_PASSWORD){
+      localStorage.setItem("admin","1");
+      location.reload();
+    }
+  }
+};
 
-/* ===== تسجيل Service Worker ===== */
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("./sw.js")
-      .then(reg => {
-        console.log("✅ Service Worker Registered:", reg.scope);
-      })
-      .catch(err => {
-        console.error("❌ Service Worker failed:", err);
-      });
-  });
+/* ================= INIT ================= */
+document.getElementById("storeTitle").textContent=t("title");
+document.getElementById("storeDesc").textContent=t("desc");
+document.getElementById("cartTitle").textContent=t("cart");
+document.getElementById("totalLabel").textContent=t("total");
+document.getElementById("checkoutBtn").textContent=t("checkout");
+
+loadProducts();
+
+/* ================= PWA ================= */
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js");
 }
 </script>
+
 </body>
 </html>
