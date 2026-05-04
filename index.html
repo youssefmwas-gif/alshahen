@@ -1,89 +1,216 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🦅 متجر الشاهين الإلكتروني</title>
-  <style>
-    body {font-family: Tahoma, Arial; background:#f6f7f9; margin:0; padding:20px; text-align:right;}
-    h1{text-align:center}
-    .nav, .footer-links{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:20px}
-    button{padding:10px 14px; border:none; border-radius:6px; cursor:pointer}
-    .outline{background:#fff; border:1px solid #ccc}
-    .card{background:#fff; border-radius:10px; padding:15px; margin:10px auto; max-width:900px; box-shadow:0 2px 8px rgba(0,0,0,.05)}
-    .products{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px}
-    .product img{height:120px; display:block; margin:auto}
-    .hidden{display:none}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجر الشاهين | خدمات رقمية</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;800&display=swap" rel="stylesheet">
+
+<meta name="theme-color" content="#d4af37">
+<meta name="description" content="متجر الشاهين – خدمات رقمية، اشتراكات، برامج، VPN، ذكاء اصطناعي">
+
+<style>
+:root {
+  --bg:#0b0b0b;
+  --panel:#131313;
+  --gold:#d4af37;
+  --text:#f5f5f5;
+  --muted:#999;
+  --radius:18px;
+}
+*{box-sizing:border-box;font-family:Tajawal,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
+h1,h2,h3{margin:0}
+.page{max-width:1200px;margin:auto;padding:20px}
+.grid{display:grid;gap:16px}
+.products{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{
+  background:var(--panel);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:0 12px 30px rgba(0,0,0,.4)
+}
+.btn{
+  border:none;cursor:pointer;
+  padding:12px 16px;
+  border-radius:12px;
+  font-weight:700
+}
+.btn-gold{background:var(--gold);color:#000}
+.btn-alt{background:#1e1e1e;color:var(--text)}
+.btn-small{padding:8px 12px;font-size:.9rem}
+.header{text-align:center;margin-bottom:24px}
+.header h1{font-size:2.5rem;color:var(--gold)}
+.cart{
+  position:sticky;top:16px
+}
+.cart-item{border-bottom:1px solid #222;padding:8px 0}
+.cart-item:last-child{border-bottom:none}
+.toast{
+  position:fixed;left:20px;bottom:20px;
+  background:#111;padding:14px 18px;
+  border-radius:14px;
+  border:1px solid rgba(212,175,55,.3);
+  opacity:0;transform:translateY(20px);
+  transition:.3s;z-index:100
+}
+.toast.show{opacity:1;transform:none}
+</style>
 </head>
+
 <body>
-<h1>🦅 متجر الشاهين الإلكتروني</h1>
-<div class="nav">
-  <button class="outline" onclick="showPage('store')">المتجر</button>
-  <button class="outline" onclick="showPage('about')">من نحن</button>
-  <button class="outline" onclick="showPage('policy')">الشروط</button>
-</div>
-<!-- من نحن -->
-<div id="about" class="card hidden">
-  <h2>من نحن</h2>
-  <p>متجر الشاهين متجر خدمات رقمية: شحن برامج، تفعيل أرقام، اشتراكات VPN وخدمات الذكاء الاصطناعي.</p>
-</div>
-<!-- الشروط -->
-<div id="policy" class="card hidden">
-  <h2>الشروط والسياسة</h2>
-  <ul>
-    <li>جميع الخدمات رقمية ولا يمكن إرجاعها.</li>
-    <li>التسليم بعد الدفع فقط.</li>
-    <li>الدفع عبر شام كاش أو محفظة إلكترونية.</li>
-  </ul>
-</div>
-<!-- المتجر -->
-<div id="store" class="card">
-  <div class="products">
-    <div class="product card">
-      <img src="images/ai.png" />
-      <h3>شحن تطبيقات الذكاء الاصطناعي</h3>
-      <button onclick="add('ذكاء اصطناعي - شهري 10)">إضافة شهري</button>
-      <button onclick="add('ذكاء اصطناعي - 3 أشهر 25)">إضافة 3 أشهر</button>
-    </div>
-    <div class="product card">
-      <img src="images/phone.png" />
-      <h3>تفعيل أرقام برامج التواصل</h3>
-      <button onclick="add('رقم مؤقت 3)">رقم مؤقت</button>
-      <button onclick="add('رقم دائم 7)">رقم دائم</button>
-    </div>
-    <div class="product card">
-      <img src="images/vpn.png" />
-      <h3>اشتراكات VPN</h3>
-      <button onclick="add('VPN شهر 5)">شهر</button>
-      <button onclick="add('VPN سنة 30)">سنة</button>
-    </div>
-  </div>
-</div>
+<div class="page">
+
+<header class="header">
+  <h1>🦅 متجر الشاهين</h1>
+  <p style="color:var(--muted)">خدمات رقمية – اشتراكات – تفعيل – VPN</p>
+</header>
+
+<div class="grid" style="grid-template-columns:1fr 360px">
+
+<!-- المنتجات -->
+<main>
+  <div class="grid products" id="products"></div>
+</main>
+
 <!-- السلة -->
-<div class="card">
-  <h2>🛒 السلة</h2>
-  <div id="cart"></div>
-  <button onclick="submitOrder()">✅ إتمام الطلب</button>
-  <p>💳 الدفع: شام كاش أو محفظة إلكترونية</p>
-  <button onclick="copyCash()">📋 نسخ رقم شام كاش</button>
-  <p id="copied" style="color:green"></p>
+<aside class="card cart">
+  <h2>🛒 السلة</h2>
+  <div id="cartItems"></div>
+
+  <p><strong>الإجمالي:</strong> <span id="total">0$</span></p>
+
+  <button class="btn btn-gold" onclick="sendOrder()">إتمام الطلب</button>
+  <button class="btn btn-alt btn-small" onclick="copyCash()">📋 نسخ رقم شام كاش</button>
+
+  <p style="font-size:.85rem;color:var(--muted)">
+    الدفع عبر شام كاش أو محفظة إلكترونية
+  </p>
+</aside>
+
 </div>
-<div class="footer-links">
-  https://wa.me/963934000097
-  <a href="https://t.me/wolfoldd" target="_blank">تيليغرام</a>
 </div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-  let cart=[];
-  function add(item){cart.push(item); render();}
-  function render(){document.getElementById('cart').innerHTML=cart.map(i=>'- '+i).join('<br>')}
-  function submitOrder(){
-    if(cart.length===0){alert('السلة فارغة');return}
-    alert('✅ تم استلام طلبك، سيتم التواصل معك');
-    const msg='طلب جديد:%0A'+cart.join('%0A');
-    window.open('https://wa.me/963934000097?text='+msg,'_blank');
-  }
-  function copyCash(){navigator.clipboard.writeText('123456789');document.getElementById('copied').innerText='✅ تم النسخ';}
-  function showPage(id){['store','about','policy'].forEach(p=>document.getElementById(p).classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+/* =================== CONFIG =================== */
+const CONFIG = {
+  whatsapp: "963934000097",
+  telegram: "wolfoldd",
+  shamCash: "123456789", // ← غيّر الرقم
+  currency: "$",
+  rateLimitMs: 90000
+};
+
+/* =================== DATA =================== */
+const PRODUCTS = [
+  {id:1,name:"اشتراك ChatGPT Plus",price:10},
+  {id:2,name:"VPN شهر",price:5},
+  {id:3,name:"VPN سنة",price:30},
+  {id:4,name:"تفعيل رقم واتساب",price:3}
+];
+
+let cart = [];
+let lastOrderTs = 0;
+
+/* =================== UI =================== */
+const productsEl = document.getElementById("products");
+const cartEl = document.getElementById("cartItems");
+const totalEl = document.getElementById("total");
+const toast = document.getElementById("toast");
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),2500);
+}
+
+/* =================== RENDER =================== */
+function renderProducts(){
+  productsEl.innerHTML = PRODUCTS.map(p=>`
+    <div class="card">
+      <h3>${p.name}</h3>
+      <p style="color:var(--gold);font-size:1.3rem">${p.price}${CONFIG.currency}</p>
+      <button class="btn btn-alt" onclick="addToCart(${p.id})">إضافة للسلة</button>
+    </div>
+  `).join("");
+}
+
+function renderCart(){
+  if(!cart.length){
+    cartEl.innerHTML = "<p style='color:var(--muted)'>السلة فارغة</p>";
+    totalEl.textContent = "0$";
+    return;
+  }
+
+  cartEl.innerHTML = cart.map(i=>`
+    <div class="cart-item">
+      ${i.name} × ${i.qty}
+      <div style="float:left">${i.price*i.qty}${CONFIG.currency}</div>
+    </div>
+  `).join("");
+
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  totalEl.textContent = total+CONFIG.currency;
+}
+
+/* =================== LOGIC =================== */
+function addToCart(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+
+  const existing = cart.find(i=>i.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...p,qty:1});
+
+  renderCart();
+  showToast("تمت إضافة المنتج");
+}
+
+function generateFingerprint(){
+  return Math.random().toString(36).slice(2,10).toUpperCase();
+}
+
+function sendOrder(){
+  if(!cart.length){
+    showToast("السلة فارغة");
+    return;
+  }
+
+  const now = Date.now();
+  if(now - lastOrderTs < CONFIG.rateLimitMs){
+    showToast("يرجى الانتظار قبل إرسال طلب جديد");
+    return;
+  }
+  lastOrderTs = now;
+
+  const orderId = generateFingerprint();
+  let text = `طلب جديد #${orderId}\n\n`;
+
+  cart.forEach((i,idx)=>{
+    text += `${idx+1}. ${i.name} × ${i.qty} = ${i.price*i.qty}${CONFIG.currency}\n`;
+  });
+
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  text += `\nالإجمالي: ${total}${CONFIG.currency}`;
+  text += `\nطريقة الدفع: شام كاش / محفظة إلكترونية`;
+
+  const waUrl = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+  window.open(waUrl,"_blank");
+
+  showToast("تم فتح واتساب");
+}
+
+function copyCash(){
+  navigator.clipboard.writeText(CONFIG.shamCash);
+  showToast("تم نسخ رقم شام كاش");
+}
+
+/* =================== INIT =================== */
+renderProducts();
+renderCart();
 </script>
 </body>
+</html>
